@@ -1,5 +1,8 @@
 <template>
-  <div id="app">黑马头条项目</div>
+  <div id="app">
+    黑马头条项目
+    <el-button type="success">成功按钮</el-button>
+  </div>
 </template>
 
 <script>
