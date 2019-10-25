@@ -6,3 +6,5 @@ Vue.config.productionTip = false
 new Vue({
   render: h => h(App)
 }).$mount('#app')
+
+// main.js的作用是入口文件
