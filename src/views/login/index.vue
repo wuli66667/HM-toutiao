@@ -3,12 +3,41 @@
     <!-- 卡片容器  el-card是一个element组件，根元素上默认添加一个类和组件的名称一致 -->
     <el-card>
       <img src="../../assets/logo_index.png" alt />
+      <!-- 表单 -->
+      <el-form :model="LoginForm">
+        <el-form-item>
+          <el-input v-model="LoginForm.mobile" placeholder="请输入手机号"></el-input>
+        </el-form-item>
+        <el-form-item>
+          <el-input
+            v-model="LoginForm.code"
+            placeholder="请输入验证码"
+            style="width:240px;margin-right:8px"
+          ></el-input>
+          <el-button>发送验证码</el-button>
+        </el-form-item>
+        <el-form-item>
+          <el-checkbox :value="true">我已阅读并同意用户协议和隐私条款</el-checkbox>
+        </el-form-item>
+        <el-form-item>
+          <el-button type="primary" @click="onSubmit" style="width:100%;">登录</el-button>
+        </el-form-item>
+      </el-form>
     </el-card>
   </div>
 </template>
 
 <script>
-export default {}
+export default {
+  data () {
+    return {
+      LoginForm: {
+        mobile: '',
+        code: ''
+      }
+    }
+  }
+}
 </script>
 
 <style scoped lang='less'>
@@ -22,8 +51,8 @@ export default {}
   //  特殊写法：cover  等比例缩放铺满容器多余不显示  contain 等比例缩放完全显示在容器内
   background: url("../../assets/login_bg.jpg") no-repeat center / cover;
   .el-card {
-    width: 500px;
-    height: 300px;
+    width: 400px;
+    height: 350px;
     position: absolute;
     top: 50%;
     left: 50%;
@@ -31,7 +60,7 @@ export default {}
     img {
       width: 200px;
       display: block;
-      margin: 0 auto;
+      margin: 0 auto 20px;
     }
   }
 }
