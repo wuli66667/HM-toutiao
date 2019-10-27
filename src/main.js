@@ -7,6 +7,11 @@ import 'element-ui/lib/theme-chalk/index.css'
 // @是别名 指定的是/src路径 一个绝对路径
 import router from '@/router'
 
+// 引入
+import axios from '@/api'
+// 挂载
+Vue.prototype.$http = axios
+
 Vue.use(ElementUI)
 
 Vue.config.productionTip = false

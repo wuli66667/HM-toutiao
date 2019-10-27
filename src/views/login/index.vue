@@ -4,11 +4,11 @@
     <el-card>
       <img src="../../assets/logo_index.png" alt />
       <!-- 表单 -->
-      <el-form :model="LoginForm">
-        <el-form-item>
+      <el-form :model="LoginForm" status-icon :rules="LoginRules" ref="loginForm">
+        <el-form-item prop="mobile">
           <el-input v-model="LoginForm.mobile" placeholder="请输入手机号"></el-input>
         </el-form-item>
-        <el-form-item>
+        <el-form-item prop="code">
           <el-input
             v-model="LoginForm.code"
             placeholder="请输入验证码"
@@ -20,7 +20,7 @@
           <el-checkbox :value="true">我已阅读并同意用户协议和隐私条款</el-checkbox>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" @click="onSubmit" style="width:100%;">登录</el-button>
+          <el-button type="primary" @click="login" style="width:100%;">登录</el-button>
         </el-form-item>
       </el-form>
     </el-card>
@@ -30,11 +30,51 @@
 <script>
 export default {
   data () {
+    const checkMobile = (rule, value, callback) => {
+      // 去判断value是否符合手机号格式
+      // 格式：1开头  第二位 3-9 之间  9位数字结尾 $结尾
+      if (/^1[3-9]\d{9}$/.test(value)) {
+        callback()
+      } else {
+        callback(new Error('手机号格式不对'))
+      }
+    }
     return {
       LoginForm: {
         mobile: '',
         code: ''
+      },
+      LoginRules: {
+        mobile: [
+          { required: true, message: '请输入手机号', trigger: 'blur' },
+          { validator: checkMobile, trigger: 'blur' }
+        ],
+        code: [
+          { required: true, message: '请输入验证码', trigger: 'blur' },
+          { len: 6, message: '验证码是6位', trigger: 'blur' }
+        ]
       }
+    }
+  },
+  methods: {
+    login () {
+      // 对整个表单进行验证
+      this.$refs['loginForm'].validate(valid => {
+        if (valid) {
+          // 校验成功 进行登陆  发请求
+          // console.log('ok')
+          this.$http
+            .post('authorizations', this.LoginForm)
+            .then(res => {
+              // 成功
+              this.$router.push('/')
+            })
+            .catch(() => {
+              // 失败
+              this.$message.error('手机号或验证码错误')
+            })
+        }
+      })
     }
   }
 }
