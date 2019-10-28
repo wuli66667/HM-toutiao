@@ -6,6 +6,8 @@ import Home from '@/views/home'
 
 import welcome from '@/views/welcome'
 
+import NotFound from '@/views/404'
+
 Vue.use(VueRouter)
 
 const router = new VueRouter({
@@ -16,12 +18,17 @@ const router = new VueRouter({
   },
   {
     // 首页
-    path: '/home',
+    path: '/',
     component: Home,
     children: [{
       path: '/',
       component: welcome
     }]
+  },
+  // 404 *匹配没有匹配前面的路由规则
+  {
+    path: '*',
+    component: NotFound
   }
   ]
 })

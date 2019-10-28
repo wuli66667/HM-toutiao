@@ -2,51 +2,54 @@
   <div class="container">
     <el-container class="home-container">
       <!-- 菜单栏 -->
-      <el-aside width="200px">
+      <el-aside :width="isOpen?'200px':'64px'">
         <!-- logo -->
-        <div class="logo"></div>
+        <div class="logo" :class="{smallLogo:!isOpen}"></div>
         <!-- 导航菜单 -->
         <el-menu
-          default-active="1"
+          default-active="/"
           background-color="#002033"
           text-color="#fff"
           active-text-color="#ffd04b"
           style="border-right:none"
+          :collapse="!isOpen"
+          :collapse-transition="false"
+          router
         >
           <!-- el-submenu  拥有子级菜单使用submenu -->
           <!-- el-menu-item  不拥有子级菜单使用menu-item -->
           <!-- index="2" 当前菜单项的唯一标识 -->
-          <el-menu-item index="1">
+          <el-menu-item index="/">
             <i class="el-icon-s-home"></i>
             <span slot="title">首页</span>
           </el-menu-item>
 
-          <el-menu-item index="2">
+          <el-menu-item index="/article">
             <i class="el-icon-document"></i>
             <span slot="title">内容管理</span>
           </el-menu-item>
 
-          <el-menu-item index="3">
+          <el-menu-item index="/image">
             <i class="el-icon-picture"></i>
             <span slot="title">素材管理</span>
           </el-menu-item>
 
-          <el-menu-item index="4">
+          <el-menu-item index="/publish">
             <i class="el-icon-s-promotion"></i>
             <span slot="title">发布文章</span>
           </el-menu-item>
 
-          <el-menu-item index="5">
+          <el-menu-item index="/comment">
             <i class="el-icon-chat-dot-round"></i>
             <span slot="title">评论管理</span>
           </el-menu-item>
 
-          <el-menu-item index="6">
+          <el-menu-item index="/fans">
             <i class="el-icon-present"></i>
             <span slot="title">粉丝管理</span>
           </el-menu-item>
 
-          <el-menu-item index="7">
+          <el-menu-item index="/setting">
             <i class="el-icon-setting"></i>
             <span slot="title">个人设置</span>
           </el-menu-item>
@@ -56,7 +59,7 @@
         <!-- 顶部 -->
         <el-header>
           <!-- 图标 -->
-          <span class="el-icon-s-fold icon"></span>
+          <span class="el-icon-s-fold icon" @click="toggleMenu"></span>
           <!-- 文章 -->
           <span class="text">江苏传智播客科技教育有限公司</span>
           <!-- 下拉菜单组件 -->
@@ -83,7 +86,20 @@
 </template>
 
 <script>
-export default {}
+export default {
+  data () {
+    return {
+      // 是不是展开的
+      isOpen: true
+    }
+  },
+  methods: {
+    toggleMenu () {
+      // 切换侧边栏  展开与收起
+      this.isOpen = !this.isOpen
+    }
+  }
+}
 </script>
 
 <style scoped lang='less'>
@@ -93,14 +109,20 @@ export default {}
   position: absolute;
   left: 0;
   top: 0;
-  .logo {
-    width: 200px;
-    height: 60px;
-    background: #002244 url("../../assets/logo_admin.png") no-repeat center /
-      140px auto;
-  }
+
   .el-aside {
     background: #002033;
+    .logo {
+      width: 100%;
+      height: 60px;
+      background: #002244 url("../../assets/logo_admin.png") no-repeat center /
+        140px auto;
+    }
+    //覆盖之前的大图 成小图
+    .smallLogo {
+      background-image: url(../../assets/logo_admin_01.png);
+      background-size: 36px auto;
+    }
   }
   .el-header {
     border-bottom: 1px solid #ddd;
