@@ -28,6 +28,7 @@
 </template>
 
 <script>
+import local from '@/utils/local'
 export default {
   data () {
     const checkMobile = (rule, value, callback) => {
@@ -41,8 +42,8 @@ export default {
     }
     return {
       LoginForm: {
-        mobile: '',
-        code: ''
+        mobile: '13911111111',
+        code: '246810'
       },
       LoginRules: {
         mobile: [
@@ -67,7 +68,9 @@ export default {
             .post('authorizations', this.LoginForm)
             .then(res => {
               // 成功
+              local.setUser(res.data.data)
               this.$router.push('/')
+              // 保存用户信息
             })
             .catch(() => {
               // 失败
@@ -89,7 +92,7 @@ export default {
   top: 0;
   left: 0;
   //  特殊写法：cover  等比例缩放铺满容器多余不显示  contain 等比例缩放完全显示在容器内
-  background: url("../../assets/login_bg.jpg") no-repeat center / cover;
+  background: url('../../assets/login_bg.jpg') no-repeat center / cover;
   .el-card {
     width: 400px;
     height: 350px;
