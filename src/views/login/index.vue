@@ -60,22 +60,41 @@ export default {
   methods: {
     login () {
       // 对整个表单进行验证
-      this.$refs['loginForm'].validate(valid => {
+      // this.$refs['loginForm'].validate(valid => {
+      //   if (valid) {
+      //     // 校验成功 进行登陆  发请求
+      //     // console.log('ok')
+      //     this.$http
+      //       .post('authorizations', this.LoginForm)
+      //       .then(res => {
+      //         // 成功
+      //         local.setUser(res.data.data)
+      //         this.$router.push('/')
+      //         // 保存用户信息
+      //       })
+      //       .catch(() => {
+      //         // 失败
+      //         this.$message.error('手机号或验证码错误')
+      //       })
+      //   }
+      // })
+      // 对整个表单进行验证
+      this.$refs['loginForm'].validate(async valid => {
         if (valid) {
-          // 校验成功 进行登陆  发请求
-          // console.log('ok')
-          this.$http
-            .post('authorizations', this.LoginForm)
-            .then(res => {
-              // 成功
-              local.setUser(res.data.data)
-              this.$router.push('/')
-              // 保存用户信息
-            })
-            .catch(() => {
-              // 失败
-              this.$message.error('手机号或验证码错误')
-            })
+          // 一下代码可能出现异常(报错) 使用try{可能报错的代码}catch(e){处理程序}
+          try {
+            // 拿到用户信息 返回值是promise// local.setUser(res.data.data)
+            const {
+              data: { data }
+            } = await this.$http.post('authorizations', this.LoginForm)
+            // 保存用户信息
+            local.setUser(data)
+            // 跳转到首页
+            this.$router.push('/')
+          } catch (e) {
+            // 错误
+            this.$message.error('手机号或验证码错误')
+          }
         }
       })
     }

@@ -63,15 +63,24 @@
           <!-- 文章 -->
           <span class="text">江苏传智播客科技教育有限公司</span>
           <!-- 下拉菜单组件 -->
-          <el-dropdown class="dropdown">
+          <el-dropdown class="dropdown" @command="handleClick">
             <span class="el-dropdown-link">
-              <img class="headIcon" src="../../assets/avatar.jpg" alt />
-              <span class="userName">昌昌</span>
+              <!-- 进行赋值 -->
+              <img class="headIcon" :src="photo" alt />
+              <!-- <img class="headIcon" src="../../assets/avatar.jpg" alt /> -->
+              <!-- 插值表达式 -->
+              <span class="userName">{{name}}</span>
               <i class="el-icon-arrow-down el-icon--right"></i>
             </span>
+            <!-- <el-dropdown-menu slot="dropdown"> -->
+            <!-- 在methods添加方法 -->
+            <!-- <el-dropdown-item icon="el-icon-setting" @click.native="setting">个人设置</el-dropdown-item> -->
+            <!-- <el-dropdown-item icon="el-icon-unlock" @click.native="logout">退出登陆</el-dropdown-item> -->
+            <!-- </el-dropdown-menu> -->
             <el-dropdown-menu slot="dropdown">
-              <el-dropdown-item icon="el-icon-setting">个人设置</el-dropdown-item>
-              <el-dropdown-item icon="el-icon-unlock">退出登陆</el-dropdown-item>
+              <!-- 在methods添加方法 -->
+              <el-dropdown-item icon="el-icon-setting" command="setting">个人设置</el-dropdown-item>
+              <el-dropdown-item icon="el-icon-unlock" command="logout">退出登陆</el-dropdown-item>
             </el-dropdown-menu>
           </el-dropdown>
         </el-header>
@@ -86,17 +95,38 @@
 </template>
 
 <script>
+import local from '@/utils/local'
 export default {
   data () {
     return {
       // 是不是展开的
-      isOpen: true
+      isOpen: true,
+      // 头像
+      photo: '',
+      // 名称
+      name: ''
     }
+  },
+  // 钩子函数
+  created () {
+    // 获取用户信息 导入模块
+    const user = local.getUser() || {}
+    this.photo = user.photo
+    this.name = user.name
   },
   methods: {
     toggleMenu () {
       // 切换侧边栏  展开与收起
       this.isOpen = !this.isOpen
+    },
+    setting () {
+      this.$router.push('/setting')
+    },
+    logout () {
+      this.$router.push('/login')
+    },
+    handleClick (command) {
+      this[command]()
     }
   }
 }
@@ -115,7 +145,7 @@ export default {
     .logo {
       width: 100%;
       height: 60px;
-      background: #002244 url("../../assets/logo_admin.png") no-repeat center /
+      background: #002244 url('../../assets/logo_admin.png') no-repeat center /
         140px auto;
     }
     //覆盖之前的大图 成小图
