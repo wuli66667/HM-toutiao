@@ -9,6 +9,14 @@ import router from '@/router'
 
 // 引入
 import axios from '@/api'
+
+// import MyBread from '@/components/my-bread'
+// // 全局注册
+// Vue.component('my-bread', MyBread) // (组件名，组件对象)
+// 导入全局面包屑插件
+import plugin from '@/components'
+Vue.use(plugin)
+
 // 挂载
 Vue.prototype.$http = axios
 

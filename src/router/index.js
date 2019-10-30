@@ -10,6 +10,8 @@ import NotFound from '@/views/404'
 
 import local from '@/utils/local'
 
+import Article from '@/views/article'
+
 Vue.use(VueRouter)
 
 const router = new VueRouter({
@@ -23,9 +25,16 @@ const router = new VueRouter({
     path: '/',
     component: Home,
     children: [{
+      // 欢迎
       path: '/',
       component: welcome
-    }]
+    },
+    // 内容管理
+    {
+      path: '/article',
+      component: Article
+    }
+    ]
   },
   // 404 *匹配没有匹配前面的路由规则
   {
