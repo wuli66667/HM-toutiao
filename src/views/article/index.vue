@@ -24,14 +24,8 @@
         </el-form-item>
         <el-form-item label="频道">
           <!-- id是现在的值 name是现在的label -->
-          <el-select v-model="reqParams.channel_id" placeholder="请选择" clearable>
-            <el-option
-              v-for="item in channelOptions"
-              :key="item.id"
-              :label="item.name"
-              :value="item.id"
-            ></el-option>
-          </el-select>
+          <!-- 插槽 -->
+          <my-channel v-model="reqParams.channel_id"></my-channel>
         </el-form-item>
         <el-form-item label="日期">
           <!-- v-model 绑定的值是[起始日期,结束日期] -->
@@ -150,20 +144,20 @@ export default {
   },
   created () {
     // 拿频道数据 这是一个方法//此时没有方法
-    this.getChannelOptions()
+    // this.getChannelOptions()
     this.getArticles()
   },
   methods: {
     // 拿后台数据要用异步的方法 获取频道选项
-    async getChannelOptions () {
-      // 获取数据 channels后台地址 data四响应主体 名称还有一个一data
-      //  所以要解构附体
-      const {
-        data: { data }
-      } = await this.$http.get('channels')
-      // 赋值给 getChannelOptions
-      this.channelOptions = data.channels
-    },
+    // async getChannelOptions () {
+    //   // 获取数据 channels后台地址 data四响应主体 名称还有一个一data
+    //   //  所以要解构附体
+    //   const {
+    //     data: { data }
+    //   } = await this.$http.get('channels')
+    //   // 赋值给 getChannelOptions
+    //   this.channelOptions = data.channels
+    // },
     // 频道选项
     async getArticles () {
       // 获取数据
