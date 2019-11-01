@@ -2,9 +2,18 @@
 import axios from 'axios'
 import local from '@/utils/local'
 import router from '@/router'
+import jsonBig from 'json-bigint'
 
 // 对axios进行配置
 axios.defaults.baseURL = 'http://ttapi.research.itcast.cn/mp/v1_0/'
+axios.defaults.transformResponse = [(data) => {
+  // 后台的原始数据   理想情况 json字符串
+  try {
+    return jsonBig.parse(data)
+  } catch (e) {
+    return data
+  }
+}]
 
 // 配置请求头getUser()是一个对象
 // 请求拦截器

@@ -24,7 +24,7 @@
         </el-form-item>
         <el-form-item label="频道">
           <!-- id是现在的值 name是现在的label -->
-          <el-select v-model="reqParams.channel_id" placeholder="请选择">
+          <el-select v-model="reqParams.channel_id" placeholder="请选择" clearable>
             <el-option
               v-for="item in channelOptions"
               :key="item.id"
@@ -35,16 +35,19 @@
         </el-form-item>
         <el-form-item label="日期">
           <!-- v-model 绑定的值是[起始日期,结束日期] -->
+          <!-- 绑定事件 -->
           <el-date-picker
             v-model="dateArr"
             type="daterange"
             range-separator="至"
             start-placeholder="开始日期"
             end-placeholder="结束日期"
+            @change="changeDate"
+            value-format="yyyy-MM-dd"
           ></el-date-picker>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary">筛选</el-button>
+          <el-button type="primary" @click="search">筛选</el-button>
         </el-form-item>
       </el-form>
     </el-card>
@@ -79,9 +82,21 @@
         </el-table-column>
         <el-table-column label="发布时间" prop="pubdate"></el-table-column>
         <el-table-column label="操作" width="120px">
-          <template>
-            <el-button type="primary" icon="el-icon-edit" circle plain></el-button>
-            <el-button type="danger" icon="el-icon-delete" circle plain></el-button>
+          <template slot-scope="scope">
+            <el-button
+              @click="toEdit(scope.row.id)"
+              type="primary"
+              icon="el-icon-edit"
+              circle
+              plain
+            ></el-button>
+            <el-button
+              @click="delArticle(scope.row.id)"
+              type="danger"
+              icon="el-icon-delete"
+              circle
+              plain
+            ></el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -102,6 +117,7 @@
 </template>
 
 <script>
+// import { log } from 'util'
 export default {
   data () {
     //   返回一个对象
@@ -167,14 +183,46 @@ export default {
       this.reqParams.page = newPage
       // 从新获取数据
       this.getArticles()
+    },
+    // 选择日期
+    changeDate (dateArr) {
+      // 注意：清空日期之后，dateArr是null  对应的 begin end 值也该为null
+      // console.log(dateArr)
+      // 若果dateArr存在 如果为null不传数据给后台
+      if (dateArr) {
+        this.reqParams.begin_pubdate = dateArr[0]
+        this.reqParams.end_pubdate = dateArr[1]
+      } else {
+        this.reqParams.begin_pubdate = null
+        this.reqParams.end_pubdate = null
+      }
+    },
+    // 删选
+    search () {
+      // 获取删选数据(转杯日期数据)
+      // 把页码换成一
+      // 处理频道空字符串的问题
+      if (this.reqParams.channel_id === '') this.reqParams.channel_id = null
+      this.reqParams.page = 1
+      this.getArticles()
+    },
+    // 编辑选项
+    toEdit (id) {
+      // 编程式导航跳过去 ？
+      // 第一种传参的方式 如果对象很多。不建议
+      // this.$router.push(`/public?id=${id}`)
+      // 第二种 query传参方式 query:{}如果有是个参数直接指定对象就可以
+      this.$router.push({ path: '/public', query: { id } })
+    },
+    // 删除功能 发请求异步
+    async delArticle (id) {
+      // 发请求 restfull 接口规则（get post put patch delete）
+      await this.$http.delete(`articles/${id}`)
+      // 提示
+      this.$message.success('删除成功')
+      // 更新列表
+      this.getArticles()
     }
-    // // 分页函数
-    // pager (newPage) {
-    //   // 修改当前的页码为新的页码
-    //   this.reqParams.page = newPage
-    //   // 重新获取数据
-    //   this.getArticles()
-    // }
   }
 }
 </script>
