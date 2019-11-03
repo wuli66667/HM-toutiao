@@ -7,17 +7,18 @@
       <!-- 按钮区域 -->
       <div class="btn">
         <el-radio-group @change="togglelist" v-model="reqParams.collect" size="small">
-          <el-radio-button label="false">全部</el-radio-button>
-          <el-radio-button label="true">收藏</el-radio-button>
+          <el-radio-button :label="false">全部</el-radio-button>
+          <el-radio-button :label="true">收藏</el-radio-button>
         </el-radio-group>
-        <el-button @click="dialogVisible=true" style="float:right" type="success" size="small">添加素材</el-button>
+        <!--@click= "dialogVisible = true " 改成方法  在定时器中这个方法也可以用-->
+        <el-button @click="open" style="float:right" type="success" size="small">添加素材</el-button>
       </div>
       <!-- 素材 -->
       <div class="img_list">
         <div class="img_item" v-for="item in images" :key="item.id">
           <img :src="item.url" alt />
-          <!-- <div class="footer" v-show="!reqParams.collect"> -->
-          <div class="footer">
+          <div class="footer" v-show="!reqParams.collect">
+            <!-- <div class="footer"> -->
             <!-- item 包含两项 id和状态 -->
             <span
               @click="toggleStatus(item)"
@@ -39,12 +40,18 @@
       ></el-pagination>
     </el-card>
     <!-- 对话框 -->
+    <!-- action是图片上传接口地址 上传图片的地址 -->
+    <!-- 设置请求头的属性 在data中声明数据-->
+    <!-- name 字段名 需要和后台保持一致 -->
+    <!-- :on-success="handleSuccess" 成功时的回调函数 -->
     <el-dialog title="添加素材" :visible.sync="dialogVisible" width="300px">
       <el-upload
         class="avatar-uploader"
         action="http://ttapi.research.itcast.cn/mp/v1_0/user/images"
         :headers="headers"
         :show-file-list="false"
+        :on-success="handleSuccess"
+        name="image"
       >
         <img v-if="imageUrl" :src="imageUrl" class="avatar" />
         <i v-else class="el-icon-plus avatar-uploader-icon"></i>
@@ -57,6 +64,7 @@
 </template>
 
 <script>
+import local from '@/utils/local'
 export default {
   data () {
     return {
@@ -71,7 +79,11 @@ export default {
       total: 0,
       // 添加素材相关数据
       dialogVisible: false,
-      imageUrl: null
+      imageUrl: null,
+      // 请求头
+      headers: {
+        Authorization: `Bearer ${local.getUser().token}`
+      }
     }
   },
   //   组件初始化 拿列表渲染的数据
@@ -79,6 +91,12 @@ export default {
     this.getImages()
   },
   methods: {
+    // 打开对话框
+    open () {
+      // 开启对话框
+      this.dialogVisible = true
+      this.imageUrl = null
+    },
     async getImages () {
       // 获取数据
       const {
@@ -133,21 +151,22 @@ export default {
         .catch(() => {
           // 点击了取消
         })
-    }
+    },
     // 添加素材
-    // 上传成功
-    // handleSuccess (res) {
-    //   // - 预览 2s 钟 ，提示上传成功
-    //   this.imageUrl = res.data.url
-    //   this.$message.success('上传成功')
-    //   window.setTimeout(() => {
-    //     // - 自动关闭对话框，更新列表数据。
-    //     this.dialogVisible = false
-    //     this.getImages()
-    //     // 再次打开对话框的时候，预览的是上传按钮 而不是 之前的图片
-    //     this.imageUrl = null
-    //   }, 2000)
-    // }
+    // 上传成功 res是响应主体 res.data.url是图片地址
+    handleSuccess (res) {
+      // - 预览 2s 钟 ，提示上传成功
+      this.imageUrl = res.data.url
+      this.$message.success('上传成功')
+      // 定时器
+      window.setTimeout(() => {
+        // - 自动关闭对话框，更新列表数据。
+        this.dialogVisible = false
+        this.getImages()
+        // 再次打开对话框的时候，预览的是上传按钮 而不是 之前的图片
+        // this.imageUrl = null
+      }, 2000)
+    }
   }
 }
 </script>
