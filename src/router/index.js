@@ -12,6 +12,9 @@ import local from '@/utils/local'
 
 import Article from '@/views/article'
 
+// 素材管理
+import Image from '@/views/image'
+
 Vue.use(VueRouter)
 
 const router = new VueRouter({
@@ -33,6 +36,11 @@ const router = new VueRouter({
     {
       path: '/article',
       component: Article
+    },
+    // 素材
+    {
+      path: '/image',
+      component: Image
     }
     ]
   },
