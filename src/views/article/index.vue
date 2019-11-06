@@ -206,7 +206,7 @@ export default {
       // 第一种传参的方式 如果对象很多。不建议
       // this.$router.push(`/public?id=${id}`)
       // 第二种 query传参方式 query:{}如果有是个参数直接指定对象就可以
-      this.$router.push({ path: '/public', query: { id } })
+      this.$router.push({ path: '/publish', query: { id } })
     },
     // 删除功能 发请求异步
     async delArticle (id) {

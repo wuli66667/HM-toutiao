@@ -12,6 +12,9 @@ import local from '@/utils/local'
 
 import Article from '@/views/article'
 
+// 发布文章
+import publish from '@/views/publish'
+
 // 素材管理
 import Image from '@/views/image'
 
@@ -41,6 +44,11 @@ const router = new VueRouter({
     {
       path: '/image',
       component: Image
+    },
+    // 发表文章
+    {
+      path: '/publish',
+      component: publish
     }
     ]
   },

@@ -4,6 +4,9 @@ import MyBread from '@/components/my-bread'
 // 引入插件
 import MyChannel from '@/components/my-channel'
 
+// 引入全局插件
+import MyImage from '@/components/my-image'
+
 // 封装一个插件 封装全局组件
 // 导出一个对象
 export default {
@@ -12,5 +15,6 @@ export default {
     // 基于Vue做任何事情（注册全局组件，指令，过滤器，挂载原型函数）
     Vue.component(MyBread.name, MyBread)
     Vue.component(MyChannel.name, MyChannel)
+    Vue.component(MyImage.name, MyImage)
   }
 }
