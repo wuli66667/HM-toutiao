@@ -96,6 +96,7 @@
 
 <script>
 import local from '@/utils/local'
+import EvevtBus from '@/eventBus'
 export default {
   data () {
     return {
@@ -113,6 +114,14 @@ export default {
     const user = local.getUser() || {}
     this.photo = user.photo
     this.name = user.name
+    // 绑定事件 updateName
+    EvevtBus.$on('updateName', name => {
+      this.name = name
+    })
+    // 绑定事件 updatePhoto
+    EvevtBus.$on('updatePhoto', photo => {
+      this.photo = photo
+    })
   },
   methods: {
     toggleMenu () {
