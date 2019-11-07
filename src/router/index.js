@@ -24,6 +24,9 @@ import Comment from '@/views/comment'
 // 个人设置
 import Setting from '@/views/setting'
 
+// 粉丝管理
+import Fans from '@/views/fans'
+
 Vue.use(VueRouter)
 
 const router = new VueRouter({
@@ -65,6 +68,11 @@ const router = new VueRouter({
     {
       path: '/setting',
       component: Setting
+    },
+    // 粉丝管理
+    {
+      path: '/fans',
+      component: Fans
     }
     ]
   },
